@@ -1,0 +1,24 @@
+$ cd /workspace/shadcn-ui && pnpm run build
+
+> shadcnui@ build /workspace/shadcn-ui
+> vite build
+
+vite v5.4.19 building for production...
+transforming...
+✓ 1716 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.89 kB │ gzip:   0.44 kB
+dist/assets/index-D7urQFu6.css   62.09 kB │ gzip:  10.94 kB
+dist/assets/index-9yqEtMON.js   367.34 kB │ gzip: 117.42 kB
+✓ built in 5.06s
+$ pnpm add jszip
+
+Progress: resolved 0, reused 1, downloaded 0, added 0
+Progress: resolved 69, reused 69, downloaded 0, added 0
+Progress: resolved 425, reused 405, downloaded 0, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Already up to date
+Progress: resolved 523, reused 449, downloaded 0, added 0, done
+
+Done in 5s

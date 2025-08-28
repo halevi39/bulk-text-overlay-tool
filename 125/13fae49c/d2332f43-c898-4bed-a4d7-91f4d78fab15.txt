@@ -1,0 +1,182 @@
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+$ cd /workspace/shadcn-ui && pnpm run build
+
+
+> shadcnui@ build /workspace/shadcn-ui
+> vite build
+
+vite v5.4.19 building for production...
+transforming...
+✓ 2102 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                            0.89 kB │ gzip:   0.44 kB
+dist/assets/index-Ok7V1z1P.css            61.74 kB │ gzip:  10.91 kB
+dist/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+dist/assets/index.es-BnaJSHBT.js         150.42 kB │ gzip:  51.39 kB
+dist/assets/html2canvas.esm-CBrSDip1.js  201.42 kB │ gzip:  48.03 kB
+dist/assets/index-DxamhinB.js            856.84 kB │ gzip: 275.32 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8.28s
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  361:4  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && pnpm run build
+
+
+> shadcnui@ build /workspace/shadcn-ui
+> vite build
+
+vite v5.4.19 building for production...
+transforming...
+✓ 7 modules transformed.
+x Build failed in 1.13s
+error during build:
+[vite:esbuild] Transform failed with 1 error:
+/workspace/shadcn-ui/src/pages/Index.tsx:361:5: ERROR: Expected identifier but found "/"
+file: /workspace/shadcn-ui/src/pages/Index.tsx:361:5
+
+Expected identifier but found "/"
+359|        textShadow: strokeWidth > 0 ? 'none' : '2px 2px 4px rgba(0,0,0,0.3)'
+360|      };
+361|    };</to_replace>
+   |       ^
+362|  </Editor.edit_file_by_replace>
+363|  
+
+    at failureErrorWithLog (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:1472:15)
+    at /workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:755:50
+    at responseCallbacks.<computed> (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:190:23)
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  361:4  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && pnpm run build
+
+
+> shadcnui@ build /workspace/shadcn-ui
+> vite build
+
+vite v5.4.19 building for production...
+transforming...
+✓ 15 modules transformed.
+x Build failed in 1.27s
+error during build:
+[vite:esbuild] Transform failed with 1 error:
+/workspace/shadcn-ui/src/pages/Index.tsx:361:5: ERROR: Expected identifier but found "/"
+file: /workspace/shadcn-ui/src/pages/Index.tsx:361:5
+
+Expected identifier but found "/"
+359|        textShadow: strokeWidth > 0 ? 'none' : '2px 2px 4px rgba(0,0,0,0.3)'
+360|      };
+361|    };</to_replace>
+   |       ^
+362|  </Editor.edit_file_by_replace>
+363|  
+
+    at failureErrorWithLog (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:1472:15)
+    at /workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:755:50
+    at responseCallbacks.<computed> (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:190:23)
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  361:4  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && pnpm run build
+
+
+> shadcnui@ build /workspace/shadcn-ui
+> vite build
+
+vite v5.4.19 building for production...
+transforming...
+✓ 8 modules transformed.
+x Build failed in 1.06s
+error during build:
+[vite:esbuild] Transform failed with 1 error:
+/workspace/shadcn-ui/src/pages/Index.tsx:361:5: ERROR: Expected identifier but found "/"
+file: /workspace/shadcn-ui/src/pages/Index.tsx:361:5
+
+Expected identifier but found "/"
+359|        textShadow: strokeWidth > 0 ? 'none' : '2px 2px 4px rgba(0,0,0,0.3)'
+360|      };
+361|    };</to_replace>
+   |       ^
+362|  </Editor.edit_file_by_replace>
+363|  
+
+    at failureErrorWithLog (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:1472:15)
+    at /workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:755:50
+    at responseCallbacks.<computed> (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/workspace/shadcn-ui/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:190:23)
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  361:4  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
