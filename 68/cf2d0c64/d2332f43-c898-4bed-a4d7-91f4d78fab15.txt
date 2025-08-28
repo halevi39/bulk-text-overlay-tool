@@ -1,0 +1,652 @@
+$ cd /workspace/shadcn-ui && rm src/pages/Index.tsx
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'EOF'
+strokeWidth > 0 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="stroke-color">Stroke Color</Label>
+                      <Input
+                        id="stroke-color"
+                        type="color"
+                        value={textBox.style.strokeColor}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeColor: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="process" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Export Settings & Processing</CardTitle>
+                <CardDescription>
+                  Configure export format and process your images
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center p-8 bg-gray-50 rounded-lg">
+                  <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Ready to Process</h3>
+                  <p className="text-gray-600 mb-4">
+                    Upload your sample image and target images to begin batch processing
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <p>• Sample Image: {sampleImage ? '✓' : '✗'}</p>
+                    <p>• Target Images: {targetImages.length > 0 ? `✓ ${targetImages.length}` : '✗'}</p>
+                    <p>• Text File: {textFile ? `✓ ${textLines.length} lines` : '✗'}</p>
+                  </div>
+                  <Button 
+                    className="mt-4" 
+                    disabled={!sampleImage || targetImages.length === 0 || textLines.length === 0 || isProcessing}
+                    onClick={handleBulkProcess}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    {isProcessing ? 'Processing...' : 'Process Images'}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+EOF
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  15:19  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && rm src/pages/Index.tsx
+
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'EOF'
+                        <div className="px-2 py-1 text-sm font-medium text-gray-500 border-t mt-2 pt-2">English Fonts</div>
+                        {ENGLISH_FONTS.map((font) => (
+                          <SelectItem key={font.value} value={font.value}>
+                            <span style={{ fontFamily: font.value }}>{font.label}</span>
+                          </SelectItem>
+                        ))}
+                        {customFonts.length > 0 && (
+                          <>
+                            <div className="px-2 py-1 text-sm font-medium text-gray-500 border-t mt-2 pt-2">Custom Fonts</div>
+                            {customFonts.map((font) => (
+                              <SelectItem key={font.name} value={font.name}>
+                                <span style={{ fontFamily: font.name }}>{font.name}</span>
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Font Size</Label>
+                      <Slider
+                        value={[textBox.style.fontSize]}
+                        onValueChange={([value]) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, fontSize: value }
+                        }))}
+                        min={12}
+                        max={120}
+                        step={1}
+                        className="w-full"
+                      />
+                      <span className="text-sm text-gray-500">{textBox.style.fontSize}px</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Text Alignment</Label>
+                      <Select 
+                        value={textBox.style.align} 
+                        onValueChange={(value: 'left' | 'center' | 'right') => 
+                          setTextBox(prev => ({ 
+                            ...prev, 
+                            style: { ...prev.style, align: value }
+                          }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="left">Left / שמאל</SelectItem>
+                          <SelectItem value="center">Center / מרכז</SelectItem>
+                          <SelectItem value="right">Right / ימין</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="text-color">Text Color</Label>
+                      <Input
+                        id="text-color"
+                        type="color"
+                        value={textBox.style.color}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, color: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Stroke Width</Label>
+                      <Slider
+                        value={[textBox.style.strokeWidth]}
+                        onValueChange={([value]) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeWidth: value }
+                        }))}
+                        min={0}
+                        max={10}
+                        step={1}
+                        className="w-full"
+                      />
+                      <span className="text-sm text-gray-500">{textBox.style.strokeWidth}px</span>
+                    </div>
+                  </div>
+
+                  {textBox.style.strokeWidth > 0 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="stroke-color">Stroke Color</Label>
+                      <Input
+                        id="stroke-color"
+                        type="color"
+                        value={textBox.style.strokeColor}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeColor: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="process" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Export Settings & Processing</CardTitle>
+                <CardDescription>
+                  Configure export format and process your images
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center p-8 bg-gray-50 rounded-lg">
+                  <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Ready to Process</h3>
+                  <p className="text-gray-600 mb-4">
+                    Upload your sample image and target images to begin batch processing
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <p>• Sample Image: {sampleImage ? '✓' : '✗'}</p>
+                    <p>• Target Images: {targetImages.length > 0 ? `✓ ${targetImages.length}` : '✗'}</p>
+                    <p>• Text File: {textFile ? `✓ ${textLines.length} lines` : '✗'}</p>
+                  </div>
+                  <div className="flex gap-4 justify-center mt-4">
+                    <Button 
+                      disabled={!sampleImage || targetImages.length === 0 || textLines.length === 0 || isProcessing}
+                      onClick={handleBulkProcess}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      {isProcessing ? 'Processing...' : 'Process Images'}
+                    </Button>
+                    {processedImages.length > 0 && (
+                      <Button 
+                        variant="outline"
+                        onClick={downloadAsZip}
+                      >
+                        <Archive className="h-4 w-4 mr-2" />
+                        Download All ({processedImages.length})
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+EOF
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  17:22  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && rm src/pages/Index.tsx
+
+$ cd /workspace/shadcn-ui && pnpm add jszip
+
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 1, reused 1, downloaded 0, added 0
+Progress: resolved 49, reused 48, downloaded 0, added 0
+Progress: resolved 214, reused 213, downloaded 1, added 0
+Progress: resolved 475, reused 398, downloaded 5, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Packages: +12
+++++++++++++
+Progress: resolved 501, reused 415, downloaded 12, added 12, done
+
+dependencies:
++ jszip 3.10.1
+
+Done in 7.1s
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'EOF'
+                          <SelectItem key={font.value} value={font.value}>
+                            <span style={{ fontFamily: font.value }}>{font.label}</span>
+                          </SelectItem>
+                        ))}
+                        {customFonts.length > 0 && (
+                          <>
+                            <div className="px-2 py-1 text-sm font-medium text-gray-500 border-t mt-2 pt-2">Custom Fonts</div>
+                            {customFonts.map((font) => (
+                              <SelectItem key={font.name} value={font.name}>
+                                <span style={{ fontFamily: font.name }}>{font.name}</span>
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Font Size</Label>
+                      <Slider
+                        value={[textBox.style.fontSize]}
+                        onValueChange={([value]) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, fontSize: value }
+                        }))}
+                        min={12}
+                        max={120}
+                        step={1}
+                        className="w-full"
+                      />
+                      <span className="text-sm text-gray-500">{textBox.style.fontSize}px</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Text Alignment</Label>
+                      <Select 
+                        value={textBox.style.align} 
+                        onValueChange={(value: 'left' | 'center' | 'right') => 
+                          setTextBox(prev => ({ 
+                            ...prev, 
+                            style: { ...prev.style, align: value }
+                          }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="left">Left / שמאל</SelectItem>
+                          <SelectItem value="center">Center / מרכז</SelectItem>
+                          <SelectItem value="right">Right / ימין</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="text-color">Text Color</Label>
+                      <Input
+                        id="text-color"
+                        type="color"
+                        value={textBox.style.color}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, color: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Stroke Width</Label>
+                      <Slider
+                        value={[textBox.style.strokeWidth]}
+                        onValueChange={([value]) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeWidth: value }
+                        }))}
+                        min={0}
+                        max={10}
+                        step={1}
+                        className="w-full"
+                      />
+                      <span className="text-sm text-gray-500">{textBox.style.strokeWidth}px</span>
+                    </div>
+                  </div>
+
+                  {textBox.style.strokeWidth > 0 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="stroke-color">Stroke Color</Label>
+                      <Input
+                        id="stroke-color"
+                        type="color"
+                        value={textBox.style.strokeColor}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeColor: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="process" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Export Settings & Processing</CardTitle>
+                <CardDescription>
+                  Configure export format and process your images
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center p-8 bg-gray-50 rounded-lg">
+                  <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Ready to Process</h3>
+                  <p className="text-gray-600 mb-4">
+                    Upload your sample image and target images to begin batch processing
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <p>• Sample Image: {sampleImage ? '✓' : '✗'}</p>
+                    <p>• Target Images: {targetImages.length > 0 ? `✓ ${targetImages.length}` : '✗'}</p>
+                    <p>• Text File: {textFile ? `✓ ${textLines.length} lines` : '✗'}</p>
+                  </div>
+                  <div className="flex gap-4 justify-center mt-4">
+                    <Button 
+                      disabled={!sampleImage || targetImages.length === 0 || textLines.length === 0 || isProcessing}
+                      onClick={handleBulkProcess}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      {isProcessing ? 'Processing...' : 'Process Images'}
+                    </Button>
+                    {processedImages.length > 0 && (
+                      <Button 
+                        variant="outline"
+                        onClick={downloadAsZip}
+                      >
+                        <Archive className="h-4 w-4 mr-2" />
+                        Download All ({processedImages.length})
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+EOF
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  4:24  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && rm -f src/pages/Index.tsx
+
+$ cd /workspace/shadcn-ui && pnpm add jszip
+
+Progress: resolved 0, reused 1, downloaded 0, added 0
+Progress: resolved 68, reused 68, downloaded 0, added 0
+Progress: resolved 442, reused 409, downloaded 0, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Already up to date
+Progress: resolved 501, reused 427, downloaded 0, added 0, done
+
+Done in 5s
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'EOF'
+                          </SelectItem>
+                        ))}
+                        {customFonts.length > 0 && (
+                          <>
+                            <div className="px-2 py-1 text-sm font-medium text-gray-500 border-t mt-2 pt-2">Custom Fonts</div>
+                            {customFonts.map((font) => (
+                              <SelectItem key={font.name} value={font.name}>
+                                <span style={{ fontFamily: font.name }}>{font.name}</span>
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Font Size</Label>
+                      <Slider
+                        value={[textBox.style.fontSize]}
+                        onValueChange={([value]) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, fontSize: value }
+                        }))}
+                        min={12}
+                        max={120}
+                        step={1}
+                        className="w-full"
+                      />
+                      <span className="text-sm text-gray-500">{textBox.style.fontSize}px</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Text Alignment</Label>
+                      <Select 
+                        value={textBox.style.align} 
+                        onValueChange={(value) => 
+                          setTextBox(prev => ({ 
+                            ...prev, 
+                            style: { ...prev.style, align: value }
+                          }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="left">Left / שמאל</SelectItem>
+                          <SelectItem value="center">Center / מרכז</SelectItem>
+                          <SelectItem value="right">Right / ימין</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="text-color">Text Color</Label>
+                      <Input
+                        id="text-color"
+                        type="color"
+                        value={textBox.style.color}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, color: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Stroke Width</Label>
+                      <Slider
+                        value={[textBox.style.strokeWidth]}
+                        onValueChange={([value]) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeWidth: value }
+                        }))}
+                        min={0}
+                        max={10}
+                        step={1}
+                        className="w-full"
+                      />
+                      <span className="text-sm text-gray-500">{textBox.style.strokeWidth}px</span>
+                    </div>
+                  </div>
+
+                  {textBox.style.strokeWidth > 0 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="stroke-color">Stroke Color</Label>
+                      <Input
+                        id="stroke-color"
+                        type="color"
+                        value={textBox.style.strokeColor}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeColor: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+                  )}
+
+                  <div className="pt-4 border-t">
+                    <Button 
+                      onClick={downloadSingleImage}
+                      disabled={!sampleImage}
+                      className="w-full"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Single Image
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="process" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Export Settings & Processing</CardTitle>
+                <CardDescription>
+                  Configure export format and process your images
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center p-8 bg-gray-50 rounded-lg">
+                  <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Ready to Process</h3>
+                  <p className="text-gray-600 mb-4">
+                    Upload your sample image and target images to begin batch processing
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <p>• Sample Image: {sampleImage ? '✓' : '✗'}</p>
+                    <p>• Target Images: {targetImages.length > 0 ? `✓ ${targetImages.length}` : '✗'}</p>
+                    <p>• Text File: {textFile ? `✓ ${textLines.length} lines` : '✗'}</p>
+                  </div>
+                  <div className="flex gap-4 justify-center mt-4">
+                    <Button 
+                      disabled={!sampleImage || targetImages.length === 0 || textLines.length === 0 || isProcessing}
+                      onClick={handleBulkProcess}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      {isProcessing ? 'Processing...' : 'Process Images'}
+                    </Button>
+                    {processedImages.length > 0 && (
+                      <Button 
+                        variant="outline"
+                        onClick={downloadAsZip}
+                      >
+                        <Archive className="h-4 w-4 mr-2" />
+                        Download All ({processedImages.length})
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+EOF
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  1:26  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ rm -f /workspace/shadcn-ui/src/pages/Index.tsx
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+$ rm -f /workspace/shadcn-ui/src/pages/Index.tsx
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+

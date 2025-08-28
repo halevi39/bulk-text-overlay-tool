@@ -1,0 +1,76 @@
+$ cd /workspace/shadcn-ui && rm src/pages/Index.tsx
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'EOF'
+strokeWidth > 0 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="stroke-color">Stroke Color</Label>
+                      <Input
+                        id="stroke-color"
+                        type="color"
+                        value={textBox.style.strokeColor}
+                        onChange={(e) => setTextBox(prev => ({ 
+                          ...prev, 
+                          style: { ...prev.style, strokeColor: e.target.value }
+                        }))}
+                        className="w-full h-12"
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="process" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Export Settings & Processing</CardTitle>
+                <CardDescription>
+                  Configure export format and process your images
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center p-8 bg-gray-50 rounded-lg">
+                  <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Ready to Process</h3>
+                  <p className="text-gray-600 mb-4">
+                    Upload your sample image and target images to begin batch processing
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <p>• Sample Image: {sampleImage ? '✓' : '✗'}</p>
+                    <p>• Target Images: {targetImages.length > 0 ? `✓ ${targetImages.length}` : '✗'}</p>
+                    <p>• Text File: {textFile ? `✓ ${textLines.length} lines` : '✗'}</p>
+                  </div>
+                  <Button 
+                    className="mt-4" 
+                    disabled={!sampleImage || targetImages.length === 0 || textLines.length === 0 || isProcessing}
+                    onClick={handleBulkProcess}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    {isProcessing ? 'Processing...' : 'Process Images'}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+EOF
+
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  15:19  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
+$ cd /workspace/shadcn-ui && rm src/pages/Index.tsx
+

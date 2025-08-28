@@ -1,0 +1,384 @@
+$ cd /workspace/shadcn-ui && pnpm add jspdf
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 1, reused 1, downloaded 0, added 0
+Progress: resolved 71, reused 70, downloaded 0, added 0
+Progress: resolved 462, reused 409, downloaded 1, added 0
+Progress: resolved 502, reused 423, downloaded 3, added 0
+Progress: resolved 505, reused 425, downloaded 3, added 0
+Progress: resolved 512, reused 426, downloaded 4, added 0
+Progress: resolved 521, reused 426, downloaded 10, added 0
+ WARN  1 deprecated subdependencies found: rollup-plugin-terser@7.0.2
+Packages: +22
+++++++++++++++++++++++
+Progress: resolved 523, reused 427, downloaded 17, added 0
+Progress: resolved 523, reused 427, downloaded 19, added 2
+Progress: resolved 523, reused 427, downloaded 19, added 10
+Progress: resolved 523, reused 427, downloaded 20, added 17
+Progress: resolved 523, reused 427, downloaded 20, added 18
+Progress: resolved 523, reused 427, downloaded 20, added 19
+Progress: resolved 523, reused 427, downloaded 21, added 19
+Progress: resolved 523, reused 427, downloaded 21, added 20
+Progress: resolved 523, reused 427, downloaded 21, added 21
+Progress: resolved 523, reused 427, downloaded 22, added 21
+Progress: resolved 523, reused 427, downloaded 22, added 22
+Progress: resolved 523, reused 427, downloaded 22, added 22, done
+.../core-js@3.45.1/node_modules/core-js postinstall$ node -e "try{require('./postinstall')}catch(e){}"
+.../core-js@3.45.1/node_modules/core-js postinstall: Thank you for using core-js ( https://github.com/zloirock/core-js ) for polyfilling JavaScript standard library!
+.../core-js@3.45.1/node_modules/core-js postinstall: The project needs your help! Please consider supporting core-js:
+.../core-js@3.45.1/node_modules/core-js postinstall: > https://opencollective.com/core-js 
+.../core-js@3.45.1/node_modules/core-js postinstall: > https://patreon.com/zloirock 
+.../core-js@3.45.1/node_modules/core-js postinstall: > https://boosty.to/zloirock 
+.../core-js@3.45.1/node_modules/core-js postinstall: > bitcoin: bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz 
+.../core-js@3.45.1/node_modules/core-js postinstall: I highly recommend reading this: https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md 
+.../core-js@3.45.1/node_modules/core-js postinstall: Done
+
+dependencies:
++ jspdf 3.0.2
+
+Done in 1m 9s
+$ cd /workspace/shadcn-ui && rm src/pages/Index.tsx
+
+$ cd /workspace/shadcn-ui && cat > src/pages/Index.tsx << 'PART1'
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@/components/ui/textarea';
+import { Upload, Download, FileText, Image as ImageIcon, Settings } from 'lucide-react';
+import { toast } from 'sonner';
+import JSZip from 'jszip';
+import jsPDF from 'jspdf';
+
+const HEBREW_FONTS = [
+  { value: 'David', label: 'דוד (David)' },
+  { value: 'Narkisim', label: 'נרקיסים (Narkisim)' },
+  { value: 'Rod', label: 'רוד (Rod)' },
+  { value: 'Miriam', label: 'מרים (Miriam)' },
+  { value: 'Gisha', label: 'גישה (Gisha)' },
+  { value: 'Tahoma', label: 'Tahoma' },
+];
+
+const ENGLISH_FONTS = [
+  { value: 'Arial', label: 'Arial' },
+  { value: 'Times New Roman', label: 'Times New Roman' },
+  { value: 'Calibri', label: 'Calibri' },
+  { value: 'Georgia', label: 'Georgia' },
+  { value: 'Helvetica', label: 'Helvetica' },
+];
+
+const EXPORT_RESOLUTIONS = [
+  { value: '180', label: '180 DPI (1488x2126px)', width: 1488, height: 2126 },
+  { value: '300', label: '300 DPI (2480x3543px)', width: 2480, height: 3543 }
+];
+
+const EXPORT_FORMATS = [
+  { value: 'png', label: 'PNG' },
+  { value: 'jpg', label: 'JPG' },
+  { value: 'pdf', label: 'PDF' }
+];
+
+export default function Index() {
+  const [sampleImage, setSampleImage] = useState(null);
+  const [targetImages, setTargetImages] = useState([]);
+  const [textFile, setTextFile] = useState(null);
+  const [textLines, setTextLines] = useState([]);
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageDimensions, setImageDimensions] = useState({ width: 800, height: 600 });
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [resizeHandle, setResizeHandle] = useState(null);
+  const [processedImages, setProcessedImages] = useState([]);
+  const [exportResolution, setExportResolution] = useState('180');
+  const [exportFormat, setExportFormat] = useState('png');
+  const [isHorizontal, setIsHorizontal] = useState(false);
+
+  const [textBox, setTextBox] = useState({
+    x: 100,
+    y: 100,
+    width: 300,
+    height: 100,
+    text: 'שלום עולם Hello World',
+    style: {
+      fontSize: 36,
+      color: '#000000',
+      strokeColor: '#ffffff',
+      strokeWidth: 2,
+      align: 'center',
+      fontFamily: 'Tahoma'
+    }
+  });
+
+  const containerRef = useRef(null);
+  const sampleInputRef = useRef(null);
+  const targetInputRef = useRef(null);
+  const textInputRef = useRef(null);
+
+  const detectLanguage = useCallback((text) => {
+    const hebrewRegex = /[\u0590-\u05FF]/;
+    return hebrewRegex.test(text) ? 'rtl' : 'ltr';
+  }, []);
+
+  const getExportDimensions = useCallback(() => {
+    const resolution = EXPORT_RESOLUTIONS.find(r => r.value === exportResolution);
+    if (isHorizontal) {
+      return { width: resolution.height, height: resolution.width };
+    }
+    return { width: resolution.width, height: resolution.height };
+  }, [exportResolution, isHorizontal]);
+PART1
+
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'PART2'
+
+  const handleSampleUpload = useCallback((e) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setSampleImage(file);
+      const url = URL.createObjectURL(file);
+      setImageUrl(url);
+      
+      const img = new Image();
+      img.onload = () => {
+        const horizontal = img.width > img.height;
+        setIsHorizontal(horizontal);
+        setImageDimensions({ width: img.width, height: img.height });
+        setTextBox(prev => ({
+          ...prev,
+          x: Math.max(20, (img.width - prev.width) / 2),
+          y: Math.max(20, (img.height - prev.height) / 2)
+        }));
+      };
+      img.src = url;
+      
+      toast.success('Sample image uploaded successfully');
+    } else {
+      toast.error('Please select a valid image file');
+    }
+  }, []);
+
+  const handleTargetUpload = useCallback((e) => {
+    const files = Array.from(e.target.files || []);
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    if (imageFiles.length > 0) {
+      setTargetImages(imageFiles);
+      toast.success(`${imageFiles.length} target images uploaded`);
+    } else {
+      toast.error('Please select valid image files');
+    }
+  }, []);
+
+  const handleTextFileUpload = useCallback((e) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'text/plain') {
+      setTextFile(file);
+      file.text().then(content => {
+        const lines = content.split('\n').filter(line => line.trim() !== '');
+        setTextLines(lines);
+        toast.success(`Text file uploaded with ${lines.length} lines`);
+      });
+    } else {
+      toast.error('Please select a valid text file');
+    }
+  }, []);
+
+  const handleTextChange = useCallback((newText) => {
+    setTextBox(prev => ({
+      ...prev,
+      text: newText
+    }));
+  }, []);
+
+  const handleMouseDown = useCallback((e, action, handle) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (action === 'drag') {
+      setIsDragging(true);
+      setDragStart({ x: x - (textBox.x * rect.width / imageDimensions.width), y: y - (textBox.y * rect.height / imageDimensions.height) });
+    } else if (action === 'resize' && handle) {
+      setIsResizing(true);
+      setResizeHandle(handle);
+      setDragStart({ x, y });
+    }
+  }, [textBox.x, textBox.y, imageDimensions]);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!containerRef.current) return;
+    
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (isDragging) {
+      const newX = Math.max(0, Math.min((x - dragStart.x) * imageDimensions.width / rect.width, imageDimensions.width - textBox.width));
+      const newY = Math.max(0, Math.min((y - dragStart.y) * imageDimensions.height / rect.height, imageDimensions.height - textBox.height));
+      
+      setTextBox(prev => ({ ...prev, x: newX, y: newY }));
+    } else if (isResizing && resizeHandle) {
+      const deltaX = (x - dragStart.x) * imageDimensions.width / rect.width;
+      const deltaY = (y - dragStart.y) * imageDimensions.height / rect.height;
+
+      setTextBox(prev => {
+        let newWidth = prev.width;
+        let newHeight = prev.height;
+        let newX = prev.x;
+        let newY = prev.y;
+
+        switch (resizeHandle) {
+          case 'se':
+            newWidth = Math.max(50, prev.width + deltaX);
+            newHeight = Math.max(30, prev.height + deltaY);
+            break;
+          case 'sw':
+            newWidth = Math.max(50, prev.width - deltaX);
+            newHeight = Math.max(30, prev.height + deltaY);
+            newX = Math.max(0, prev.x + deltaX);
+            break;
+          case 'ne':
+            newWidth = Math.max(50, prev.width + deltaX);
+            newHeight = Math.max(30, prev.height - deltaY);
+            newY = Math.max(0, prev.y + deltaY);
+            break;
+          case 'nw':
+            newWidth = Math.max(50, prev.width - deltaX);
+            newHeight = Math.max(30, prev.height - deltaY);
+            newX = Math.max(0, prev.x + deltaX);
+            newY = Math.max(0, prev.y + deltaY);
+            break;
+        }
+
+        return { ...prev, x: newX, y: newY, width: newWidth, height: newHeight };
+      });
+
+      setDragStart({ x, y });
+    }
+  }, [isDragging, isResizing, resizeHandle, dragStart, imageDimensions, textBox.width, textBox.height]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+    setIsResizing(false);
+    setResizeHandle(null);
+  }, []);
+PART2
+
+$ cd /workspace/shadcn-ui && cat >> src/pages/Index.tsx << 'PART3'
+
+  const handleTouchStart = useCallback((e, action, handle) => {
+    const touch = e.touches[0];
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    if (action === 'drag') {
+      setIsDragging(true);
+      setDragStart({ x: x - (textBox.x * rect.width / imageDimensions.width), y: y - (textBox.y * rect.height / imageDimensions.height) });
+    } else if (action === 'resize' && handle) {
+      setIsResizing(true);
+      setResizeHandle(handle);
+      setDragStart({ x, y });
+    }
+  }, [textBox.x, textBox.y, imageDimensions]);
+
+  const handleTouchMove = useCallback((e) => {
+    e.preventDefault();
+    if (!containerRef.current) return;
+    
+    const touch = e.touches[0];
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    if (isDragging) {
+      const newX = Math.max(0, Math.min((x - dragStart.x) * imageDimensions.width / rect.width, imageDimensions.width - textBox.width));
+      const newY = Math.max(0, Math.min((y - dragStart.y) * imageDimensions.height / rect.height, imageDimensions.height - textBox.height));
+      
+      setTextBox(prev => ({ ...prev, x: newX, y: newY }));
+    } else if (isResizing && resizeHandle) {
+      const deltaX = (x - dragStart.x) * imageDimensions.width / rect.width;
+      const deltaY = (y - dragStart.y) * imageDimensions.height / rect.height;
+
+      setTextBox(prev => {
+        let newWidth = prev.width;
+        let newHeight = prev.height;
+        let newX = prev.x;
+        let newY = prev.y;
+
+        switch (resizeHandle) {
+          case 'se':
+            newWidth = Math.max(50, prev.width + deltaX);
+            newHeight = Math.max(30, prev.height + deltaY);
+            break;
+          case 'sw':
+            newWidth = Math.max(50, prev.width - deltaX);
+            newHeight = Math.max(30, prev.height + deltaY);
+            newX = Math.max(0, prev.x + deltaX);
+            break;
+          case 'ne':
+            newWidth = Math.max(50, prev.width + deltaX);
+            newHeight = Math.max(30, prev.height - deltaY);
+            newY = Math.max(0, prev.y + deltaY);
+            break;
+          case 'nw':
+            newWidth = Math.max(50, prev.width - deltaX);
+            newHeight = Math.max(30, prev.height - deltaY);
+            newX = Math.max(0, prev.x + deltaX);
+            newY = Math.max(0, prev.y + deltaY);
+            break;
+        }
+
+        return { ...prev, x: newX, y: newY, width: newWidth, height: newHeight };
+      });
+
+      setDragStart({ x, y });
+    }
+  }, [isDragging, isResizing, resizeHandle, dragStart, imageDimensions, textBox.width, textBox.height]);
+
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => {
+      if (isDragging || isResizing) {
+        handleMouseMove(e);
+      }
+    };
+
+    const handleGlobalMouseUp = () => {
+      handleMouseUp();
+    };
+
+    const handleGlobalTouchMove = (e) => {
+      if (isDragging || isResizing) {
+        handleTouchMove(e);
+      }
+    };
+
+    const handleGlobalTouchEnd = () => {
+      handleMouseUp();
+    };
+
+    if (isDragging || isResizing) {
+      document.addEventListener('mousemove', handleGlobalMouseMove);
+      document.addEventListener('mouseup', handleGlobalMouseUp);
+      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+      document.addEventListener('touchend', handleGlobalTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+      document.removeEventListener('touchmove', handleGlobalTouchMove);
+      document.removeEventListener('touchend', handleGlobalTouchEnd);
+    };
+  }, [isDragging, isResizing, handleMouseMove, handleMouseUp, handleTouchMove]);
+PART3
+

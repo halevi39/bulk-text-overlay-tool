@@ -1,0 +1,1 @@
+$ cd /workspace/shadcn-ui && rm -rf node_modules/.vite dist

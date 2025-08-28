@@ -1,0 +1,41 @@
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+$ cd /workspace/shadcn-ui && pnpm run build
+
+
+> shadcnui@ build /workspace/shadcn-ui
+> vite build
+
+vite v5.4.19 building for production...
+transforming...
+✓ 2102 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                            0.89 kB │ gzip:   0.44 kB
+dist/assets/index-Ok7V1z1P.css            61.74 kB │ gzip:  10.91 kB
+dist/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+dist/assets/index.es-BnaJSHBT.js         150.42 kB │ gzip:  51.39 kB
+dist/assets/html2canvas.esm-CBrSDip1.js  201.42 kB │ gzip:  48.03 kB
+dist/assets/index-DxamhinB.js            856.84 kB │ gzip: 275.32 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8.28s
+$ cd /workspace/shadcn-ui && pnpm run lint
+
+
+> shadcnui@ lint /workspace/shadcn-ui
+> eslint --quiet ./src
+
+
+/workspace/shadcn-ui/src/pages/Index.tsx
+  361:4  error  Parsing error: Declaration or statement expected
+
+✖ 1 problem (1 error, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
